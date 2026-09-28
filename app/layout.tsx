@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "ByteSpace — Find your next thing",
+  title: "ByteSpace Courses — Learn something new",
   description:
-    "Learn in-demand skills from the people who use them every day. Find your next big thing with ByteSpace.",
+    "Discover courses across creative, technology, and business topics with ByteSpace Courses.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

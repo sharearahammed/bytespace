@@ -1,57 +1,149 @@
 "use client";
 
-import Link from "next/link";
-import { useMemo, useState } from "react";
-import { ArrowRight, ArrowUpRight, BarChart3, BookOpen, Check, ChevronDown, Clock3, Code2, GraduationCap, Headphones, Layers3, Menu, Palette, Play, Search, Sparkles, Star, UsersRound, X, Zap } from "lucide-react";
+import { FormEvent, useMemo, useState } from "react";
+import { Image as ImageIcon, Search, ShoppingBag, Star, Menu, X, BarChart3 } from "lucide-react";
 
-const categories = ["All courses", "Design", "Development", "Marketing", "Business"];
+const categories = [
+  "Featured",
+  "Music",
+  "Drawing & Painting",
+  "Marketing",
+  "Animation",
+  "Social Media",
+  "UI/UX Design",
+  "Creative Marketing",
+  "Digital Illustration",
+  "Film & Video",
+  "Crafts",
+  "Freelance & Entrepreneurship",
+  "Graphic Design",
+  "Photography",
+  "Productivity",
+  "Web Development",
+  "Data Science",
+  "Cooking",
+];
+
 const courses = [
-  { title: "Learn Figma from Basic to Advanced", category: "Design", instructor: "Sarah Johnson", lessons: 24, duration: "8h 20m", rating: "4.9", students: "2.4k", price: "$49", image: "photo-1558655146-d09347e92766" },
-  { title: "Build Digital Assets that Sell", category: "Business", instructor: "Marcus Chen", lessons: 18, duration: "6h 10m", rating: "4.8", students: "1.8k", price: "$39", image: "photo-1460925895917-afdab827c52f" },
-  { title: "The Power of Big Data Analytics", category: "Development", instructor: "David Kim", lessons: 32, duration: "12h 45m", rating: "5.0", students: "3.1k", price: "$59", image: "photo-1551288049-bebda4e38f71" },
-  { title: "Branding that makes people feel", category: "Design", instructor: "Olivia Parker", lessons: 21, duration: "7h 05m", rating: "4.9", students: "1.2k", price: "$45", image: "photo-1507238691740-187a5b1d37b8" },
-  { title: "Mastering Money Management", category: "Business", instructor: "James Wilson", lessons: 16, duration: "5h 30m", rating: "4.8", students: "980", price: "$35", image: "photo-1460925895917-afdab827c52f" },
-  { title: "From idea to startup success", category: "Marketing", instructor: "Nina Roberts", lessons: 27, duration: "9h 15m", rating: "4.9", students: "2.0k", price: "$55", image: "photo-1552664730-d307ca884978" },
-];
-const categoryCards = [
-  { name: "Design", count: "120+ courses", icon: Palette, tint: "lavender" },
-  { name: "Development", count: "85+ courses", icon: Code2, tint: "mint" },
-  { name: "Marketing", count: "64+ courses", icon: BarChart3, tint: "peach" },
-  { name: "Business", count: "92+ courses", icon: Layers3, tint: "yellow" },
+  { title: "Learn Figma from Basic to Advanced", category: "UI/UX Design" },
+  { title: "Build Digital Asset", category: "Graphic Design" },
+  { title: "the Power of Big Data", category: "Data Science" },
+  { title: "Balancing Productivity and Creativity", category: "Productivity" },
+  { title: "Mastering Money Management", category: "Freelance & Entrepreneurship" },
+  { title: "From Idea to Startup Success", category: "Marketing" },
 ];
 
-function Brand({ light = false }: { light?: boolean }) {
-  return <Link className={`brand${light ? " brand--light" : ""}`} href="#home" aria-label="ByteSpace home"><span className="brand-mark" aria-hidden="true"><span /><span /><span /></span><span>byte<span className="brand-space">space</span></span></Link>;
+function Brand() {
+  return (
+    <a className="brand" href="#home" aria-label="ByteSpace home">
+      <span className="brand-mark" aria-hidden="true"><i /><i /><i /></span>
+      <span>ByteSpace</span>
+    </a>
+  );
 }
 
-function CourseCard({ course }: { course: (typeof courses)[number] }) {
-  return <article className="course-card"><div className="course-image" role="img" aria-label={`${course.category} course preview`} style={{ backgroundImage: `url('https://images.unsplash.com/${course.image}?auto=format&fit=crop&w=900&q=85')` }}><span className="course-category">{course.category}</span><button className="course-play" type="button" aria-label={`Preview ${course.title}`}><Play size={15} fill="currentColor" /></button></div><div className="course-content"><div className="course-meta"><span><Star size={13} fill="currentColor" /> {course.rating}</span><span>{course.students} students</span></div><h3>{course.title}</h3><p className="instructor">By {course.instructor}</p><div className="course-bottom"><span className="course-details"><span><BookOpen size={14} /> {course.lessons} lessons</span><span><Clock3 size={14} /> {course.duration}</span></span><strong>{course.price}</strong></div></div></article>;
+function DummyImage({ className = "" }: { className?: string }) {
+  return (
+    <div className={`dummy-image ${className}`} role="img" aria-label="Blank image placeholder">
+      <ImageIcon aria-hidden="true" />
+    </div>
+  );
+}
+
+function CourseCard({ title }: { title: string }) {
+  return (
+    <article className="course-card">
+      <div className="course-preview">
+        <DummyImage />
+        <div className="preview-details"><span>17 Lessons</span><span>2 hours 16 mins</span><span>59 Comments</span></div>
+      </div>
+      <div className="course-title-row">
+        <h3>{title}</h3>
+        <span className="rating">4.5 <Star size={16} fill="currentColor" /></span>
+      </div>
+      <p className="course-author">by <a href="#creators">purepearl studio</a></p>
+      <div className="course-lower-row">
+        <span className="level"><BarChart3 size={15} /> Beginner</span>
+        <div className="student-avatars" aria-label="More than 26 students"><i /><i /><i /><i /><b>26+</b></div>
+      </div>
+      <p className="course-price"><strong>$25</strong><span>/lifetime</span></p>
+    </article>
+  );
 }
 
 export default function Home() {
-  const [activeCategory, setActiveCategory] = useState("All courses");
-  const [search, setSearch] = useState("");
-  const [mobileNavOpen, setMobileNavOpen] = useState(false);
-  const filteredCourses = useMemo(() => courses.filter((course) => (activeCategory === "All courses" || course.category === activeCategory) && `${course.title} ${course.category} ${course.instructor}`.toLowerCase().includes(search.toLowerCase())), [activeCategory, search]);
+  const [activeCategory, setActiveCategory] = useState("Featured");
+  const [searchInput, setSearchInput] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [menuOpen, setMenuOpen] = useState(false);
+  const visibleCourses = useMemo(() => courses.filter((course) => {
+    const inCategory = activeCategory === "Featured" || course.category === activeCategory;
+    const matchesSearch = `${course.title} ${course.category} purepearl studio`.toLowerCase().includes(searchTerm.toLowerCase());
+    return inCategory && matchesSearch;
+  }), [activeCategory, searchTerm]);
 
-  return <main id="home">
-    <div className="announcement"><Sparkles size={14} /><span>New skills, new possibilities. Start learning today.</span><a href="#courses">Explore courses <ArrowRight size={13} /></a></div>
-    <header className="site-header"><div className="header-inner"><Brand /><button className="mobile-menu-toggle" aria-label={mobileNavOpen ? "Close menu" : "Open menu"} onClick={() => setMobileNavOpen(!mobileNavOpen)} type="button">{mobileNavOpen ? <X /> : <Menu />}</button><nav className={`main-nav${mobileNavOpen ? " main-nav--open" : ""}`} aria-label="Main navigation"><a className="nav-link nav-link--active" href="#home" onClick={() => setMobileNavOpen(false)}>Home</a><a className="nav-link" href="#categories" onClick={() => setMobileNavOpen(false)}>Categories <ChevronDown size={14} /></a><a className="nav-link" href="#courses" onClick={() => setMobileNavOpen(false)}>Courses</a><a className="nav-link" href="#about" onClick={() => setMobileNavOpen(false)}>About us</a></nav><div className="header-actions"><Link className="login-link" href="#login">Log in</Link><Link className="button button--small" href="#courses">Get started <ArrowUpRight size={15} /></Link></div></div></header>
+  function handleSearch(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setSearchTerm(searchInput.trim());
+    document.getElementById("courses")?.scrollIntoView({ behavior: "smooth" });
+  }
 
-    <section className="hero" aria-labelledby="hero-heading"><div className="hero-grid-lines" aria-hidden="true" /><div className="hero-orbit hero-orbit--one" /><div className="hero-orbit hero-orbit--two" /><div className="hero-inner"><div className="hero-copy"><div className="eyebrow eyebrow--light"><span className="eyebrow-dot" /> YOUR NEXT CHAPTER STARTS HERE</div><h1 id="hero-heading">Discover your passion.<br /><span>Build your future.</span></h1><p>Learn in-demand skills from the people who use them every day. Your next big thing is closer than you think.</p><div className="hero-actions"><a className="button button--lime" href="#courses">Explore courses <ArrowRight size={17} /></a><a className="watch-link" href="#about"><span className="watch-icon"><Play size={12} fill="currentColor" /></span> See how it works</a></div><div className="hero-proof"><div className="avatar-stack"><span>SM</span><span>AJ</span><span>MK</span><span>+</span></div><div><div className="proof-stars"><Star size={13} fill="currentColor" /><Star size={13} fill="currentColor" /><Star size={13} fill="currentColor" /><Star size={13} fill="currentColor" /><Star size={13} fill="currentColor" /></div><span>Loved by 12,000+ learners</span></div></div></div><div className="hero-art" aria-label="A learner exploring online courses"><div className="hero-photo-shape" /><div className="hero-photo" /><div className="floating-card floating-card--progress"><span className="progress-icon"><Zap size={16} fill="currentColor" /></span><div><strong>You&apos;re on a roll!</strong><small>5 days learning streak</small></div><span className="progress-spark">↗</span></div><div className="floating-card floating-card--course"><div className="mini-course-art"><span /><span /><span /></div><div><small>CONTINUE LEARNING</small><strong>UI Design Essentials</strong><span className="mini-progress"><i /></span></div></div><div className="hero-doodle hero-doodle--star">✳</div><div className="hero-doodle hero-doodle--spark">✦</div><div className="hero-note"><span className="note-icon"><GraduationCap size={17} /></span><span><strong>Learn at your pace</strong><small>Anytime, anywhere</small></span></div></div></div><div className="hero-bottom"><span>SKILLS FOR WHAT&apos;S NEXT</span><div className="hero-logos"><span>◈ <b>design</b>lab</span><span><span className="logo-spark">✳</span> makers</span><span>◉ <b>mindful</b></span><span className="logo-wordmark">/motion</span><span>✦ buildspace</span></div></div></section>
+  return (
+    <main id="home">
+      <section className="hero" aria-labelledby="hero-title">
+        <div className="hero-grid" aria-hidden="true" />
+        <div className="shape shape-left" aria-hidden="true"><i /><i /><i /><i /></div>
+        <div className="shape shape-right" aria-hidden="true" />
+        <div className="scribble scribble-left" aria-hidden="true">〰</div>
+        <div className="scribble scribble-right" aria-hidden="true">〰</div>
+        <div className="paper-plane" aria-hidden="true" />
+        <header className="site-header">
+          <div className="header-inner">
+            <Brand />
+            <button className="menu-toggle" type="button" aria-label={menuOpen ? "Close menu" : "Open menu"} onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? <X /> : <Menu />}</button>
+            <nav className={menuOpen ? "main-nav main-nav-open" : "main-nav"} aria-label="Main navigation">
+              <a href="#home" onClick={() => setMenuOpen(false)}>Home</a>
+              <a href="#courses" onClick={() => setMenuOpen(false)}>Courses</a>
+              <a href="#creators" onClick={() => setMenuOpen(false)}>Creators</a>
+            </nav>
+            <div className="header-actions"><a href="#sign-in">Sign In</a><a href="#join-us">Join Us</a><a className="bag-link" href="#courses" aria-label="Course basket"><ShoppingBag size={22} /></a></div>
+          </div>
+        </header>
 
-    <section className="category-section section-wrap" id="categories"><div className="section-heading section-heading--row"><div><span className="eyebrow">LEARN SOMETHING NEW</span><h2>Find your <span>thing.</span></h2><p>Curious minds belong everywhere. What are you in the mood to learn?</p></div><a className="text-link" href="#courses">Browse all categories <ArrowRight size={16} /></a></div><div className="category-grid">{categoryCards.map(({ name, count, icon: Icon, tint }) => <button className="category-card" key={name} onClick={() => { setActiveCategory(name); document.getElementById("courses")?.scrollIntoView({ behavior: "smooth" }); }} type="button"><span className={`category-icon category-icon--${tint}`}><Icon size={22} /></span><span className="category-copy"><strong>{name}</strong><small>{count}</small></span><ArrowUpRight className="category-arrow" size={17} /></button>)}</div></section>
+        <div className="hero-copy">
+          <h1 id="hero-title">Get Access to Hundreds<br />Courses Available</h1>
+          <p>Unlock your creativity, gain valuable knowledge, and grow your business with our wide range of courses.</p>
+          <form className="hero-search" onSubmit={handleSearch}>
+            <label><Search size={20} /><input aria-label="Course, topic, creator" placeholder="Course, topic, creator" value={searchInput} onChange={(event) => setSearchInput(event.target.value)} /></label>
+            <button type="submit">Search</button>
+          </form>
+        </div>
 
-    <section className="courses-section" id="courses"><div className="section-wrap"><div className="section-heading section-heading--row courses-heading"><div><span className="eyebrow">HANDPICKED FOR YOU</span><h2>Learn a skill. <span>Change everything.</span></h2><p>Expert-led courses designed to move you forward, one lesson at a time.</p></div><a className="text-link" href="#all-courses">View all courses <ArrowRight size={16} /></a></div><div className="course-toolbar"><div className="course-tabs" role="tablist" aria-label="Filter by course category">{categories.map((category) => <button className={activeCategory === category ? "course-tab course-tab--active" : "course-tab"} key={category} onClick={() => setActiveCategory(category)} role="tab" aria-selected={activeCategory === category} type="button">{category}</button>)}</div><label className="search-box"><Search size={17} /><input aria-label="Search courses" placeholder="Search courses..." value={search} onChange={(event) => setSearch(event.target.value)} /></label></div>{filteredCourses.length ? <div className="course-grid">{filteredCourses.map((course) => <CourseCard course={course} key={course.title} />)}</div> : <div className="empty-state"><Search size={25} /><strong>No courses found</strong><span>Try another keyword or choose a different category.</span><button className="text-link" onClick={() => { setSearch(""); setActiveCategory("All courses"); }} type="button">Clear filters <ArrowRight size={15} /></button></div>}<div className="all-courses-cta" id="all-courses"><a className="button button--outline" href="#courses">Explore all courses <ArrowRight size={16} /></a></div></div></section>
+        <div className="hero-illustration" aria-label="Featured learning image placeholders">
+          <div className="hero-lime-disc" />
+          <DummyImage className="hero-person-placeholder" />
+          <div className="hero-info-card design-card"><span>UI/UX Design</span><small>200 Courses&nbsp; · &nbsp;1000+ Students</small></div>
+          <div className="hero-info-card progress-card"><span>Learning Progress</span><strong>55%</strong><i><b /></i></div>
+          <div className="hero-info-card happy-card"><span>Happy Students</span><small>4.5 (240) <Star size={12} fill="currentColor" /></small><div className="happy-avatars"><i /><i /><i /><i /><i /><b>2K+</b></div></div>
+        </div>
+      </section>
 
-    <section className="feature-section section-wrap" id="about"><div className="feature-visual"><div className="feature-backdrop"><span className="feature-scribble">learn<br />by doing</span></div><div className="feature-dashboard"><div className="dashboard-top"><span className="dashboard-dot" /><span className="dashboard-dot" /><span className="dashboard-dot" /><small>MY LEARNING SPACE</small></div><div className="dashboard-title">Your progress <span>this week</span></div><div className="chart-wrap"><div className="chart-y"><span>100%</span><span>50%</span><span>0%</span></div><div className="chart-lines"><i /><i /><i /><svg viewBox="0 0 360 135" preserveAspectRatio="none" aria-label="Progress chart trending upward"><path d="M0 112 C28 97 42 105 63 84 S105 94 126 65 165 83 187 58 214 64 241 37 274 53 300 25 337 33 360 7" fill="none" stroke="#3355ff" strokeWidth="4" strokeLinecap="round" /></svg><div className="chart-weeks"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div></div></div><div className="dashboard-footer"><span><span className="tiny-check"><Check size={10} /></span> 8 lessons completed</span><strong>+24% <ArrowUpRight size={13} /></strong></div></div><div className="feature-sticker"><Sparkles size={20} /><span>Small steps.<br /><strong>Big things.</strong></span></div><div className="feature-avatar">✦</div></div><div className="feature-copy"><span className="eyebrow">A BETTER WAY TO GROW</span><h2>Big goals start with <span>one small step.</span></h2><p>Real growth doesn&apos;t happen overnight. ByteSpace makes it easier to show up, learn a little, and keep going.</p><ul><li><span><Check size={15} /></span>Learn from industry experts, not textbooks</li><li><span><Check size={15} /></span>Make progress that fits your real life</li><li><span><Check size={15} /></span>Build skills you can put to work today</li></ul><a className="button button--dark" href="#courses">Start your learning journey <ArrowRight size={16} /></a></div></section>
+      <section className="logo-strip" aria-label="Featured partners">
+        <div className="logo-strip-inner"><span><i className="logo-orbit" /> Logoipsum</span><span><i className="logo-sun" /> Logoipsum</span><span><i className="logo-bolt">↯</i> Logoipsum</span><span><i className="logo-flower">✿</i> Logoipsum</span><span><i className="logo-rings" /> Logoipsum</span></div>
+      </section>
 
-    <section className="stats-section"><div className="section-wrap stats-inner"><div className="stats-intro"><span className="eyebrow eyebrow--light">GROWING TOGETHER</span><h2>A little progress.<br /><span>A lot of possibility.</span></h2></div><div className="stat"><strong>12<span>k+</span></strong><small>Curious learners</small></div><div className="stat"><strong>360<span>+</span></strong><small>Expert-led courses</small></div><div className="stat"><strong>96<span>%</span></strong><small>Would recommend us</small></div></div></section>
-
-    <section className="testimonial-section section-wrap"><div className="section-heading testimonial-heading"><span className="eyebrow">GOOD THINGS ARE HAPPENING</span><h2>Don&apos;t take our word <span>for it.</span></h2></div><div className="testimonial-card"><div className="quote-mark">“</div><div><div className="testimonial-stars"><Star /><Star /><Star /><Star /><Star /></div><blockquote>ByteSpace helped me turn a curiosity into a career. The lessons felt practical from day one — and for the first time, learning actually fit into my life.</blockquote><div className="testimonial-person"><span className="testimonial-avatar">AM</span><span><strong>Alex Morgan</strong><small>Product designer &amp; ByteSpace learner</small></span></div></div><div className="testimonial-side"><span>01 <i /> 03</span><a href="#courses" aria-label="Next testimonial"><ArrowRight size={18} /></a></div></div></section>
-
-    <section className="final-cta section-wrap"><div className="final-cta-orb final-cta-orb--one" /><div className="final-cta-orb final-cta-orb--two" /><div className="final-cta-content"><span className="eyebrow eyebrow--light"><Sparkles size={14} /> YOUR FUTURE SELF SAYS THANKS</span><h2>Ready to find out<br />what you&apos;re <span>capable of?</span></h2><p>Pick a course. Find your people. See where it takes you.</p><a className="button button--lime" href="#courses">Find your first course <ArrowRight size={17} /></a><div className="cta-note"><UsersRound size={15} /> Join 12,000+ learners growing together</div></div><div className="cta-illustration" aria-hidden="true"><div className="cta-ring cta-ring--outer" /><div className="cta-ring cta-ring--inner" /><div className="cta-book"><span /><span /><span /></div><div className="cta-leaf cta-leaf--one">✳</div><div className="cta-leaf cta-leaf--two">✦</div></div></section>
-
-    <footer className="site-footer"><div className="footer-main section-wrap"><div className="footer-brand-col"><Brand light /><p>A little space to learn, grow, and figure out what&apos;s next.</p><div className="social-links"><a href="#instagram" aria-label="Instagram">ig</a><a href="#linkedin" aria-label="LinkedIn">in</a><a href="#youtube" aria-label="YouTube">▶</a></div></div><div className="footer-column"><strong>Explore</strong><a href="#courses">All courses</a><a href="#categories">Categories</a><a href="#about">Our approach</a></div><div className="footer-column"><strong>ByteSpace</strong><a href="#about">About us</a><a href="#careers">Careers</a><a href="#contact">Contact</a></div><div className="footer-column footer-newsletter"><strong>Good things in your inbox</strong><p>Fresh ideas and learning picks, once in a while.</p><form onSubmit={(event) => event.preventDefault()}><input type="email" aria-label="Email address" placeholder="Your email address" required /><button type="submit" aria-label="Subscribe"><ArrowRight size={17} /></button></form><small><Headphones size={12} /> No spam, just good stuff.</small></div></div><div className="footer-bottom section-wrap"><span>© 2025 ByteSpace. Made for the curious.</span><div><a href="#privacy">Privacy</a><a href="#terms">Terms</a><span>Made with <span className="footer-heart">♥</span> for lifelong learners</span></div></div></footer>
-  </main>;
+      <section className="courses-section" id="courses">
+        <div className="section-heading">
+          <h2>Discover Your Passion,<br />Build Your Skills</h2>
+          <p>At Bytespace Courses, we bring you closer to life-changing knowledge. Explore a variety of courses across different<br className="desktop-break" /> fields, from technology to the arts, and make a difference in your career and life.</p>
+        </div>
+        <div className="category-chips" aria-label="Course categories">
+          {categories.map((category) => <button key={category} className={activeCategory === category ? "category-chip category-chip-active" : "category-chip"} type="button" onClick={() => setActiveCategory(category)}>{category}</button>)}
+          <button className="more-categories" type="button" onClick={() => setActiveCategory("Featured")}>+ More</button>
+        </div>
+        {visibleCourses.length > 0 ? <div className="course-grid">{visibleCourses.map((course) => <CourseCard key={course.title} title={course.title} />)}</div> : <div className="empty-state">No matching courses. Try another search or category.</div>}
+      </section>
+      <footer className="page-footer" id="creators"><Brand /><span>© ByteSpace Courses</span><a href="#home">Back to top ↑</a></footer>
+    </main>
+  );
 }
