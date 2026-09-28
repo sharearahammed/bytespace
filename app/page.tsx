@@ -1,69 +1,57 @@
-import Image from "next/image";
+"use client";
+
+import Link from "next/link";
+import { useMemo, useState } from "react";
+import { ArrowRight, ArrowUpRight, BarChart3, BookOpen, Check, ChevronDown, Clock3, Code2, GraduationCap, Headphones, Layers3, Menu, Palette, Play, Search, Sparkles, Star, UsersRound, X, Zap } from "lucide-react";
+
+const categories = ["All courses", "Design", "Development", "Marketing", "Business"];
+const courses = [
+  { title: "Learn Figma from Basic to Advanced", category: "Design", instructor: "Sarah Johnson", lessons: 24, duration: "8h 20m", rating: "4.9", students: "2.4k", price: "$49", image: "photo-1558655146-d09347e92766" },
+  { title: "Build Digital Assets that Sell", category: "Business", instructor: "Marcus Chen", lessons: 18, duration: "6h 10m", rating: "4.8", students: "1.8k", price: "$39", image: "photo-1460925895917-afdab827c52f" },
+  { title: "The Power of Big Data Analytics", category: "Development", instructor: "David Kim", lessons: 32, duration: "12h 45m", rating: "5.0", students: "3.1k", price: "$59", image: "photo-1551288049-bebda4e38f71" },
+  { title: "Branding that makes people feel", category: "Design", instructor: "Olivia Parker", lessons: 21, duration: "7h 05m", rating: "4.9", students: "1.2k", price: "$45", image: "photo-1507238691740-187a5b1d37b8" },
+  { title: "Mastering Money Management", category: "Business", instructor: "James Wilson", lessons: 16, duration: "5h 30m", rating: "4.8", students: "980", price: "$35", image: "photo-1460925895917-afdab827c52f" },
+  { title: "From idea to startup success", category: "Marketing", instructor: "Nina Roberts", lessons: 27, duration: "9h 15m", rating: "4.9", students: "2.0k", price: "$55", image: "photo-1552664730-d307ca884978" },
+];
+const categoryCards = [
+  { name: "Design", count: "120+ courses", icon: Palette, tint: "lavender" },
+  { name: "Development", count: "85+ courses", icon: Code2, tint: "mint" },
+  { name: "Marketing", count: "64+ courses", icon: BarChart3, tint: "peach" },
+  { name: "Business", count: "92+ courses", icon: Layers3, tint: "yellow" },
+];
+
+function Brand({ light = false }: { light?: boolean }) {
+  return <Link className={`brand${light ? " brand--light" : ""}`} href="#home" aria-label="ByteSpace home"><span className="brand-mark" aria-hidden="true"><span /><span /><span /></span><span>byte<span className="brand-space">space</span></span></Link>;
+}
+
+function CourseCard({ course }: { course: (typeof courses)[number] }) {
+  return <article className="course-card"><div className="course-image" role="img" aria-label={`${course.category} course preview`} style={{ backgroundImage: `url('https://images.unsplash.com/${course.image}?auto=format&fit=crop&w=900&q=85')` }}><span className="course-category">{course.category}</span><button className="course-play" type="button" aria-label={`Preview ${course.title}`}><Play size={15} fill="currentColor" /></button></div><div className="course-content"><div className="course-meta"><span><Star size={13} fill="currentColor" /> {course.rating}</span><span>{course.students} students</span></div><h3>{course.title}</h3><p className="instructor">By {course.instructor}</p><div className="course-bottom"><span className="course-details"><span><BookOpen size={14} /> {course.lessons} lessons</span><span><Clock3 size={14} /> {course.duration}</span></span><strong>{course.price}</strong></div></div></article>;
+}
 
 export default function Home() {
-  return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
+  const [activeCategory, setActiveCategory] = useState("All courses");
+  const [search, setSearch] = useState("");
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const filteredCourses = useMemo(() => courses.filter((course) => (activeCategory === "All courses" || course.category === activeCategory) && `${course.title} ${course.category} ${course.instructor}`.toLowerCase().includes(search.toLowerCase())), [activeCategory, search]);
+
+  return <main id="home">
+    <div className="announcement"><Sparkles size={14} /><span>New skills, new possibilities. Start learning today.</span><a href="#courses">Explore courses <ArrowRight size={13} /></a></div>
+    <header className="site-header"><div className="header-inner"><Brand /><button className="mobile-menu-toggle" aria-label={mobileNavOpen ? "Close menu" : "Open menu"} onClick={() => setMobileNavOpen(!mobileNavOpen)} type="button">{mobileNavOpen ? <X /> : <Menu />}</button><nav className={`main-nav${mobileNavOpen ? " main-nav--open" : ""}`} aria-label="Main navigation"><a className="nav-link nav-link--active" href="#home" onClick={() => setMobileNavOpen(false)}>Home</a><a className="nav-link" href="#categories" onClick={() => setMobileNavOpen(false)}>Categories <ChevronDown size={14} /></a><a className="nav-link" href="#courses" onClick={() => setMobileNavOpen(false)}>Courses</a><a className="nav-link" href="#about" onClick={() => setMobileNavOpen(false)}>About us</a></nav><div className="header-actions"><Link className="login-link" href="#login">Log in</Link><Link className="button button--small" href="#courses">Get started <ArrowUpRight size={15} /></Link></div></div></header>
+
+    <section className="hero" aria-labelledby="hero-heading"><div className="hero-grid-lines" aria-hidden="true" /><div className="hero-orbit hero-orbit--one" /><div className="hero-orbit hero-orbit--two" /><div className="hero-inner"><div className="hero-copy"><div className="eyebrow eyebrow--light"><span className="eyebrow-dot" /> YOUR NEXT CHAPTER STARTS HERE</div><h1 id="hero-heading">Discover your passion.<br /><span>Build your future.</span></h1><p>Learn in-demand skills from the people who use them every day. Your next big thing is closer than you think.</p><div className="hero-actions"><a className="button button--lime" href="#courses">Explore courses <ArrowRight size={17} /></a><a className="watch-link" href="#about"><span className="watch-icon"><Play size={12} fill="currentColor" /></span> See how it works</a></div><div className="hero-proof"><div className="avatar-stack"><span>SM</span><span>AJ</span><span>MK</span><span>+</span></div><div><div className="proof-stars"><Star size={13} fill="currentColor" /><Star size={13} fill="currentColor" /><Star size={13} fill="currentColor" /><Star size={13} fill="currentColor" /><Star size={13} fill="currentColor" /></div><span>Loved by 12,000+ learners</span></div></div></div><div className="hero-art" aria-label="A learner exploring online courses"><div className="hero-photo-shape" /><div className="hero-photo" /><div className="floating-card floating-card--progress"><span className="progress-icon"><Zap size={16} fill="currentColor" /></span><div><strong>You&apos;re on a roll!</strong><small>5 days learning streak</small></div><span className="progress-spark">↗</span></div><div className="floating-card floating-card--course"><div className="mini-course-art"><span /><span /><span /></div><div><small>CONTINUE LEARNING</small><strong>UI Design Essentials</strong><span className="mini-progress"><i /></span></div></div><div className="hero-doodle hero-doodle--star">✳</div><div className="hero-doodle hero-doodle--spark">✦</div><div className="hero-note"><span className="note-icon"><GraduationCap size={17} /></span><span><strong>Learn at your pace</strong><small>Anytime, anywhere</small></span></div></div></div><div className="hero-bottom"><span>SKILLS FOR WHAT&apos;S NEXT</span><div className="hero-logos"><span>◈ <b>design</b>lab</span><span><span className="logo-spark">✳</span> makers</span><span>◉ <b>mindful</b></span><span className="logo-wordmark">/motion</span><span>✦ buildspace</span></div></div></section>
+
+    <section className="category-section section-wrap" id="categories"><div className="section-heading section-heading--row"><div><span className="eyebrow">LEARN SOMETHING NEW</span><h2>Find your <span>thing.</span></h2><p>Curious minds belong everywhere. What are you in the mood to learn?</p></div><a className="text-link" href="#courses">Browse all categories <ArrowRight size={16} /></a></div><div className="category-grid">{categoryCards.map(({ name, count, icon: Icon, tint }) => <button className="category-card" key={name} onClick={() => { setActiveCategory(name); document.getElementById("courses")?.scrollIntoView({ behavior: "smooth" }); }} type="button"><span className={`category-icon category-icon--${tint}`}><Icon size={22} /></span><span className="category-copy"><strong>{name}</strong><small>{count}</small></span><ArrowUpRight className="category-arrow" size={17} /></button>)}</div></section>
+
+    <section className="courses-section" id="courses"><div className="section-wrap"><div className="section-heading section-heading--row courses-heading"><div><span className="eyebrow">HANDPICKED FOR YOU</span><h2>Learn a skill. <span>Change everything.</span></h2><p>Expert-led courses designed to move you forward, one lesson at a time.</p></div><a className="text-link" href="#all-courses">View all courses <ArrowRight size={16} /></a></div><div className="course-toolbar"><div className="course-tabs" role="tablist" aria-label="Filter by course category">{categories.map((category) => <button className={activeCategory === category ? "course-tab course-tab--active" : "course-tab"} key={category} onClick={() => setActiveCategory(category)} role="tab" aria-selected={activeCategory === category} type="button">{category}</button>)}</div><label className="search-box"><Search size={17} /><input aria-label="Search courses" placeholder="Search courses..." value={search} onChange={(event) => setSearch(event.target.value)} /></label></div>{filteredCourses.length ? <div className="course-grid">{filteredCourses.map((course) => <CourseCard course={course} key={course.title} />)}</div> : <div className="empty-state"><Search size={25} /><strong>No courses found</strong><span>Try another keyword or choose a different category.</span><button className="text-link" onClick={() => { setSearch(""); setActiveCategory("All courses"); }} type="button">Clear filters <ArrowRight size={15} /></button></div>}<div className="all-courses-cta" id="all-courses"><a className="button button--outline" href="#courses">Explore all courses <ArrowRight size={16} /></a></div></div></section>
+
+    <section className="feature-section section-wrap" id="about"><div className="feature-visual"><div className="feature-backdrop"><span className="feature-scribble">learn<br />by doing</span></div><div className="feature-dashboard"><div className="dashboard-top"><span className="dashboard-dot" /><span className="dashboard-dot" /><span className="dashboard-dot" /><small>MY LEARNING SPACE</small></div><div className="dashboard-title">Your progress <span>this week</span></div><div className="chart-wrap"><div className="chart-y"><span>100%</span><span>50%</span><span>0%</span></div><div className="chart-lines"><i /><i /><i /><svg viewBox="0 0 360 135" preserveAspectRatio="none" aria-label="Progress chart trending upward"><path d="M0 112 C28 97 42 105 63 84 S105 94 126 65 165 83 187 58 214 64 241 37 274 53 300 25 337 33 360 7" fill="none" stroke="#3355ff" strokeWidth="4" strokeLinecap="round" /></svg><div className="chart-weeks"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div></div></div><div className="dashboard-footer"><span><span className="tiny-check"><Check size={10} /></span> 8 lessons completed</span><strong>+24% <ArrowUpRight size={13} /></strong></div></div><div className="feature-sticker"><Sparkles size={20} /><span>Small steps.<br /><strong>Big things.</strong></span></div><div className="feature-avatar">✦</div></div><div className="feature-copy"><span className="eyebrow">A BETTER WAY TO GROW</span><h2>Big goals start with <span>one small step.</span></h2><p>Real growth doesn&apos;t happen overnight. ByteSpace makes it easier to show up, learn a little, and keep going.</p><ul><li><span><Check size={15} /></span>Learn from industry experts, not textbooks</li><li><span><Check size={15} /></span>Make progress that fits your real life</li><li><span><Check size={15} /></span>Build skills you can put to work today</li></ul><a className="button button--dark" href="#courses">Start your learning journey <ArrowRight size={16} /></a></div></section>
+
+    <section className="stats-section"><div className="section-wrap stats-inner"><div className="stats-intro"><span className="eyebrow eyebrow--light">GROWING TOGETHER</span><h2>A little progress.<br /><span>A lot of possibility.</span></h2></div><div className="stat"><strong>12<span>k+</span></strong><small>Curious learners</small></div><div className="stat"><strong>360<span>+</span></strong><small>Expert-led courses</small></div><div className="stat"><strong>96<span>%</span></strong><small>Would recommend us</small></div></div></section>
+
+    <section className="testimonial-section section-wrap"><div className="section-heading testimonial-heading"><span className="eyebrow">GOOD THINGS ARE HAPPENING</span><h2>Don&apos;t take our word <span>for it.</span></h2></div><div className="testimonial-card"><div className="quote-mark">“</div><div><div className="testimonial-stars"><Star /><Star /><Star /><Star /><Star /></div><blockquote>ByteSpace helped me turn a curiosity into a career. The lessons felt practical from day one — and for the first time, learning actually fit into my life.</blockquote><div className="testimonial-person"><span className="testimonial-avatar">AM</span><span><strong>Alex Morgan</strong><small>Product designer &amp; ByteSpace learner</small></span></div></div><div className="testimonial-side"><span>01 <i /> 03</span><a href="#courses" aria-label="Next testimonial"><ArrowRight size={18} /></a></div></div></section>
+
+    <section className="final-cta section-wrap"><div className="final-cta-orb final-cta-orb--one" /><div className="final-cta-orb final-cta-orb--two" /><div className="final-cta-content"><span className="eyebrow eyebrow--light"><Sparkles size={14} /> YOUR FUTURE SELF SAYS THANKS</span><h2>Ready to find out<br />what you&apos;re <span>capable of?</span></h2><p>Pick a course. Find your people. See where it takes you.</p><a className="button button--lime" href="#courses">Find your first course <ArrowRight size={17} /></a><div className="cta-note"><UsersRound size={15} /> Join 12,000+ learners growing together</div></div><div className="cta-illustration" aria-hidden="true"><div className="cta-ring cta-ring--outer" /><div className="cta-ring cta-ring--inner" /><div className="cta-book"><span /><span /><span /></div><div className="cta-leaf cta-leaf--one">✳</div><div className="cta-leaf cta-leaf--two">✦</div></div></section>
+
+    <footer className="site-footer"><div className="footer-main section-wrap"><div className="footer-brand-col"><Brand light /><p>A little space to learn, grow, and figure out what&apos;s next.</p><div className="social-links"><a href="#instagram" aria-label="Instagram">ig</a><a href="#linkedin" aria-label="LinkedIn">in</a><a href="#youtube" aria-label="YouTube">▶</a></div></div><div className="footer-column"><strong>Explore</strong><a href="#courses">All courses</a><a href="#categories">Categories</a><a href="#about">Our approach</a></div><div className="footer-column"><strong>ByteSpace</strong><a href="#about">About us</a><a href="#careers">Careers</a><a href="#contact">Contact</a></div><div className="footer-column footer-newsletter"><strong>Good things in your inbox</strong><p>Fresh ideas and learning picks, once in a while.</p><form onSubmit={(event) => event.preventDefault()}><input type="email" aria-label="Email address" placeholder="Your email address" required /><button type="submit" aria-label="Subscribe"><ArrowRight size={17} /></button></form><small><Headphones size={12} /> No spam, just good stuff.</small></div></div><div className="footer-bottom section-wrap"><span>© 2025 ByteSpace. Made for the curious.</span><div><a href="#privacy">Privacy</a><a href="#terms">Terms</a><span>Made with <span className="footer-heart">♥</span> for lifelong learners</span></div></div></footer>
+  </main>;
 }
